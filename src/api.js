@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://restaurant-backend.onrender.com/api",
+  baseURL: "https://rest-backend-evx8.onrender.com/api",
 });
 
 export default API;
