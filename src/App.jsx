@@ -13,7 +13,6 @@ const PrivateRoute = ({ children, adminOnly }) => {
   
   return children;
 };
-
 const App = () => {
   return (
     <AuthProvider>
