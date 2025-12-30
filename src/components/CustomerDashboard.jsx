@@ -16,10 +16,15 @@ const CustomerDashboard = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const timeSlots = [
-    '12:00-14:00', '14:00-16:00', '16:00-18:00',
-    '18:00-20:00', '20:00-22:00', '22:00-00:00'
-  ];
+const timeSlots = [
+  '12:00 PM - 2:00 PM',
+  '2:00 PM - 4:00 PM',
+  '4:00 PM - 6:00 PM',
+  '6:00 PM - 8:00 PM',
+  '8:00 PM - 10:00 PM',
+  '10:00 PM - 12:00 AM'
+];
+// const timeSlots = [ '12:00-14:00', '14:00-16:00', '16:00-18:00', '18:00-20:00', '20:00-22:00', '22:00-00:00' ];
 
   useEffect(() => {
     fetchReservations();
@@ -27,7 +32,7 @@ const CustomerDashboard = () => {
 
   const fetchReservations = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/reservations/my-reservations');
+      const res = await axios.get('http://localhost:5000/api/reservations/myres');
       setReservations(res.data);
     } catch (err) {
       console.error(err);
@@ -41,7 +46,7 @@ const CustomerDashboard = () => {
     }
     
     try {
-      const res = await axios.get('http://localhost:5000/api/reservations/available-tables', {
+      const res = await axios.get('http://localhost:5000/api/reservations/available', {
         params: { date, timeSlot, guests }
       });
       setAvailableTables(res.data);
@@ -99,6 +104,23 @@ const CustomerDashboard = () => {
     logout();
     navigate('/login');
   };
+
+//   const formatTimeSlot = (slot) => {
+//   const [start, end] = slot.split("-");
+
+//   const to12Hour = (time) => {
+//     let [hour, minute] = time.split(":");
+//     hour = parseInt(hour, 10);
+
+//     const period = hour >= 12 ? "PM" : "AM";
+//     hour = hour % 12 || 12;
+
+//     return `${hour}:${minute} ${period}`;
+//   };
+
+//   return `${to12Hour(start)} - ${to12Hour(end)}`;
+// };
+
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -236,7 +258,9 @@ const CustomerDashboard = () => {
                       <p className="text-gray-600">
                         {new Date(reservation.date).toLocaleDateString()}
                       </p>
+                      {/* <p className="text-gray-600">{formatTimeSlot(reservation.timeSlot)}</p> */}
                       <p className="text-gray-600">{reservation.timeSlot}</p>
+
                       <p className="text-gray-600">{reservation.guests} guests</p>
                       <p className={`mt-2 font-semibold ${
                         reservation.status === 'cancelled' ? 'text-red-700' : 'text-green-700'

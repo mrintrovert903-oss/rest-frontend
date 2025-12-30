@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [reservations, setReservations] = useState([]);
-  const [filterDate, setFilterDate] = useState('');
-  const [success, setSuccess] = useState('');
-  const [error, setError] = useState('');
+  const [filterDate, setFilterDate] = useState("");
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchAllReservations();
@@ -17,10 +17,12 @@ const AdminDashboard = () => {
 
   const fetchAllReservations = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/admin/reservations');
+      const res = await axios.get(
+        "http://localhost:5000/api/admin/reservations"
+      );
       setReservations(res.data);
     } catch (err) {
-      setError('Error fetching reservations');
+      setError("Error fetching reservations");
     }
   };
 
@@ -29,31 +31,35 @@ const AdminDashboard = () => {
       fetchAllReservations();
       return;
     }
-    
+
     try {
-      const res = await axios.get(`http://localhost:5000/api/admin/reservations/date/${filterDate}`);
+      const res = await axios.get(
+        `http://localhost:5000/api/admin/reservations/date/${filterDate}`
+      );
       setReservations(res.data);
     } catch (err) {
-      setError('Error fetching reservations');
+      setError("Error fetching reservations");
     }
   };
 
   const cancelReservation = async (id) => {
-    if (window.confirm('Cancel this reservation?')) {
+    if (window.confirm("Cancel this reservation?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/admin/reservations/${id}`);
-        setSuccess('Reservation cancelled');
+        await axios.delete(
+          `http://localhost:5000/api/admin/reservations/${id}`
+        );
+        setSuccess("Reservation cancelled");
         fetchAllReservations();
-        setTimeout(() => setSuccess(''), 3000);
+        setTimeout(() => setSuccess(""), 3000);
       } catch (err) {
-        setError('Error cancelling reservation');
+        setError("Error cancelling reservation");
       }
     }
   };
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -79,7 +85,7 @@ const AdminDashboard = () => {
             {error}
           </div>
         )}
-        
+
         {success && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
             {success}
@@ -103,7 +109,7 @@ const AdminDashboard = () => {
             </button>
             <button
               onClick={() => {
-                setFilterDate('');
+                setFilterDate("");
                 fetchAllReservations();
               }}
               className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
@@ -117,7 +123,7 @@ const AdminDashboard = () => {
           <h2 className="text-xl font-bold mb-4">
             All Reservations ({reservations.length})
           </h2>
-          
+
           {reservations.length === 0 ? (
             <p className="text-gray-600">No reservations found</p>
           ) : (
@@ -136,27 +142,34 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {reservations.map(reservation => (
-                    <tr key={reservation._id} className="border-b hover:bg-gray-50">
+                  {reservations.map((reservation) => (
+                    <tr
+                      key={reservation._id}
+                      className="border-b hover:bg-gray-50"
+                    >
                       <td className="p-2">{reservation.user.name}</td>
                       <td className="p-2">{reservation.user.email}</td>
-                      <td className="p-2">Table {reservation.table.tableNumber}</td>
+                      <td className="p-2">
+                        Table {reservation.table.tableNumber}
+                      </td>
                       <td className="p-2">
                         {new Date(reservation.date).toLocaleDateString()}
                       </td>
                       <td className="p-2">{reservation.timeSlot}</td>
                       <td className="p-2">{reservation.guests}</td>
                       <td className="p-2">
-                        <span className={`px-2 py-1 rounded text-sm ${
-                          reservation.status === 'active' 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
+                        <span
+                          className={`px-2 py-1 rounded text-sm ${
+                            reservation.status === "active"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
+                        >
                           {reservation.status}
                         </span>
                       </td>
                       <td className="p-2">
-                        {reservation.status === 'active' && (
+                        {reservation.status === "active" && (
                           <button
                             onClick={() => cancelReservation(reservation._id)}
                             className="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600"
