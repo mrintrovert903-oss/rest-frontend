@@ -51,7 +51,7 @@ const Register = () => {
           </div>
           
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Email</label>
+            <label className="block text-gray-700 mb-2">E-mail</label>
             <input
               type="email"
               value={email}
