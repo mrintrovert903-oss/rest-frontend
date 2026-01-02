@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from '../api'
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
@@ -17,8 +17,8 @@ const AdminDashboard = () => {
 
   const fetchAllReservations = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/admin/reservations"
+      const res = await API.get(
+        "/admin/reservations"
       );
       setReservations(res.data);
     } catch (err) {
@@ -33,8 +33,8 @@ const AdminDashboard = () => {
     }
 
     try {
-      const res = await axios.get(
-        `http://localhost:5000/api/admin/reservations/date/${filterDate}`
+      const res = await API.get(
+        `/admin/reservations/date/${filterDate}`
       );
       setReservations(res.data);
     } catch (err) {
@@ -45,8 +45,8 @@ const AdminDashboard = () => {
   const cancelReservation = async (id) => {
     if (window.confirm("Cancel this reservation?")) {
       try {
-        await axios.delete(
-          `http://localhost:5000/api/admin/reservations/${id}`
+        await API.delete(
+          `/admin/reservations/${id}`
         );
         setSuccess("Reservation cancelled");
         fetchAllReservations();
