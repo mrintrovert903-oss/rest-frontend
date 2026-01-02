@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api'
 
 const CustomerDashboard = () => {
   const { user, logout } = useAuth();
@@ -32,7 +32,7 @@ const timeSlots = [
 
   const fetchReservations = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/reservations/myres');
+      const res = await API.get('/api/reservations/myres');
       setReservations(res.data);
     } catch (err) {
       console.error(err);
@@ -46,7 +46,7 @@ const timeSlots = [
     }
     
     try {
-      const res = await axios.get('http://localhost:5000/api/reservations/available', {
+      const res = await API.get('/api/reservations/available', {
         params: { date, timeSlot, guests }
       });
       setAvailableTables(res.data);
@@ -67,7 +67,7 @@ const timeSlots = [
     }
     
     try {
-      await axios.post('http://localhost:5000/api/reservations', {
+      await API.post('/api/reservations', {
         tableId: selectedTable,
         date,
         timeSlot,
@@ -90,7 +90,7 @@ const timeSlots = [
   const cancelReservation = async (id) => {
     if (window.confirm('Are you sure you want to cancel this reservation?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/reservations/${id}`);
+        await API.delete(`/api/reservations/${id}`);
         setSuccess('Reservation cancelled');
         fetchReservations();
         setTimeout(() => setSuccess(''), 3000);
